@@ -1,0 +1,25 @@
+version: "3.7"
+
+services:
+  postgres:
+    image: postgres:13.4-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=lojinha
+    volumes:
+      - postgres-13:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+  redis:
+    image: redis:5.0
+    ports:
+      - 6399:6399
+  mailhog:
+      image: 'mailhog/mailhog:latest'
+      ports:
+        - 1045:1045
+        - 8045:8045
+
+volumes:
+  postgres-13:
