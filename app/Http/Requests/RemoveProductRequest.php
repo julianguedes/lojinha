@@ -24,7 +24,8 @@ class RemoveProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'product_id' => ['required', 'int', 'exists:products,id']
+            'product_id' => ['required', 'int', 'exists:products,id'],
+            'quantity' => ['required', 'int', 'gt:0']
         ];
     }
 }
