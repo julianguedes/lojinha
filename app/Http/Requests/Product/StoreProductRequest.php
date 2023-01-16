@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Product;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -25,7 +25,7 @@ class StoreProductRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:255'],
-            'description' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'max:255'],
             'value' => ['required', 'int', 'gt:0']
             
         ];

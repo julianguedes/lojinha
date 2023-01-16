@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use App\Http\Requests\AddProductRequest;
-use App\Http\Requests\RemoveProductRequest;
+use App\Http\Requests\Cart\AddProductRequest;
+use App\Http\Requests\Cart\RemoveProductRequest;
 
 
 class CartController extends Controller
@@ -24,14 +24,21 @@ class CartController extends Controller
 
     public function addProduct(Cart $cart, AddProductRequest $request)
     {
-        $product = $cart->products()->findOrFail($request->product_id);
+        $product = $cart->products()->find($request->product_id);
         if($product)
         {
-          $cart->products()->updateExistingPivot($request->product_id, ['quantity' => $product->pivot->quantity + $request->quantity]);
+          $cart->products()->updateExistingPivot($request->product_id, [
+
+            'quantity' => $product->pivot->quantity + $request->quantity,
+            'total' => ($product->pivot->quantity + $request->quantity) * $product->value
+        ]);
         }
         else
         {
-          $cart->products()->attach($request->product_id, ['quantity' => $request->quantity]);
+            $cart->products()->attach($request->product_id, [
+                'quantity' => $request->quantity,
+                'total' => Product::find($request->product_id)->value * $request->quantity
+            ]);
         }
         return $cart;
     }
@@ -43,7 +50,10 @@ class CartController extends Controller
 
         if($product->pivot->quantity > $request->quantity)
         {
-            $cart->products()->updateExistingPivot($request->product_id, ['quantity' => $product->pivot->quantity - $request->quantity]);
+            $cart->products()->updateExistingPivot($request->product_id, [
+                'quantity' => $product->pivot->quantity - $request->quantity,
+                'total' => ($product->pivot->quantity - $request->quantity) * $product->value
+            ]);
         }
         else
         {

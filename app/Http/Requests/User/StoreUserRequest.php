@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
 
-class RemoveProductRequest extends FormRequest
+class StoreUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +25,9 @@ class RemoveProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'product_id' => ['required', 'int', 'exists:products,id'],
-            'quantity' => ['required', 'int', 'gt:0']
+            'name' => ['required', 'max:255'],
+            'email' => ['required', 'string', 'unique:users,email'],
+            'password' => ['required', Password::defaults()]
         ];
     }
 }
