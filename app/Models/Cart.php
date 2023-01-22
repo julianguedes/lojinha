@@ -25,10 +25,11 @@ class Cart extends Model
 
     public function getTotalProductsValueAttribute()
     {
-        $products = $this->products()->get(['value']);
-        return array_reduce($products->toArray(), function($total, $product){
-            return $total + $product['value'] * $product['pivot']['quantity'];
-        }, 0);
+        $products = $this
+            ->products()
+            ->get(['value']);
+                return array_reduce($products->toArray(), function($total, $product){
+                return $total + $product['value'] * $product['pivot']['quantity'];
+            }, 0);
     }
-
 }

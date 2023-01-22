@@ -45,7 +45,7 @@ class CartController extends Controller
 
     public function removeProduct(Cart $cart, RemoveProductRequest $request)
     {
-       $product = $cart->products()->findOfFail($request->product_id);
+       $product = $cart->products()->findOrFail($request->product_id);
         abort_if($product->pivot->quantity < $request->quantity, 500, 'Impossível remover essa quantidade');
 
         if($product->pivot->quantity > $request->quantity)

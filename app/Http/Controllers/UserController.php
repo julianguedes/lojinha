@@ -21,7 +21,6 @@ class UserController extends Controller
         $user = User::create($request->validated());
         $user->cart()->create();
         return $user;
-
     }
 
     public function show(User $user)
