@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Order;
-use Illuminate\Http\Request;
 use App\Http\Requests\Order\StoreOrderRequest;
 
 class OrderController extends Controller
@@ -24,6 +23,7 @@ class OrderController extends Controller
                 'user_id' => $request->user_id
             ]
         );
+
         $cart->products()->detach();
         return $order;
     }

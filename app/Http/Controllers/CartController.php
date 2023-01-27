@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Product;
-use Illuminate\Http\Request;
 use App\Http\Requests\Cart\AddProductRequest;
 use App\Http\Requests\Cart\RemoveProductRequest;
 
@@ -22,17 +21,17 @@ class CartController extends Controller
         return $cart->loadMissing('products');
     }
 
-    public function addProduct(Cart $cart, AddProductRequest $request)
-    {
+    public function addProduct(Cart $cart, AddProductRequest $request){
         $product = $cart->products()->find($request->product_id);
         if($product)
+
         {
           $cart->products()->updateExistingPivot($request->product_id, [
-
             'quantity' => $product->pivot->quantity + $request->quantity,
             'total' => ($product->pivot->quantity + $request->quantity) * $product->value
         ]);
         }
+        
         else
         {
             $cart->products()->attach($request->product_id, [
