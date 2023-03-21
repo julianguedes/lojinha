@@ -23,13 +23,18 @@ Route::middleware('auth:api')->group(function(){
     Route::apiResource('products', ProductController::class); 
     Route::apiResource('carts', CartController::class);
     Route::apiResource('orders', OrderController::class);
-    Route::apiResource('users', UserController::class);
+    Route::apiResource('users', UserController::class)->except(['store']);
 
     Route::put('/carts/{cart}/add-product', [CartController::class, 'addProduct'])->name('add-product');
     Route::delete('/carts/{cart}/remove-product', [CartController::class, 'removeProduct'])->name('remove-product');
     Route::delete('/carts/{cart}/remove-all-products', [CartController::class, 'removeAllProducts'])->name('remove-all-product');
-
 });
 
+    Route::post('/users', [UserController::class, 'store']);
 
 
+    Route::post('test', function(){
+    return [
+        'message' => 'teste',
+    ];
+});

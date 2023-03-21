@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Order;
-use App\Http\Requests\Order\StoreOrderRequest;
 
 class OrderController extends Controller
 {
@@ -14,13 +13,13 @@ class OrderController extends Controller
         return Order::all();
     }
 
-    public function store(StoreOrderRequest $request)
+    public function store()
     {
-        $cart = Cart::with('products')->findOrFail($request->cart_id);
+        $cart = auth()->user()->cart->load('products');
         $order = Order::create(
             [
                 'cart_items' => $cart->toArray(),
-                'user_id' => $request->user_id
+                'user_id' => auth()->user()->id,
             ]
         );
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Cart\AddProductRequest;
 use App\Http\Requests\Cart\RemoveProductRequest;
 
@@ -21,7 +22,12 @@ class CartController extends Controller
         return $cart->loadMissing('products');
     }
 
-    public function addProduct(Cart $cart, AddProductRequest $request){
+    public function addProduct(Cart $cart, AddProductRequest $request)
+    {
+        if($cart->user_id != auth()->user()->id){
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+        
         $product = $cart->products()->find($request->product_id);
         if($product)
 
@@ -44,6 +50,10 @@ class CartController extends Controller
 
     public function removeProduct(Cart $cart, RemoveProductRequest $request)
     {
+        if($cart->user_id != auth()->user()->id){
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
        $product = $cart->products()->findOrFail($request->product_id);
         abort_if($product->pivot->quantity < $request->quantity, 500, 'Impossível remover essa quantidade');
 
